@@ -1,0 +1,32 @@
+{% extends 'shop/base.html' %}
+{% load custom_filters %}
+{% block title %}تماس با ما{% endblock %}
+{% block body_class %}contact-page{% endblock %}
+{% block content %}
+
+<!-- بخش تماس با ما -->
+<section class="contact-section">
+
+  <!-- عنوان صفحه و توضیح -->
+    <h1 class="page-title">ارتباط با ما</h1>
+    <p>برای ارتباط با ما می‌توانید از طریق فرم زیر یا اطلاعات تماس اقدام نمایید. ما مشتاقانه منتظر نظرات و پیشنهادات شما هستیم.</p>
+    
+    <!-- فرم ارسال پیام -->
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary btn-bold">ارسال</button>
+    </form>
+    <hr>
+    
+    <h2 class="section-subtitle">اطلاعات تماس</h2>
+    <p><i class="fas fa-envelope text-primary me-1"></i> ایمیل: <a href="https://mail.google.com/mail/?view=cm&fs=1&to=mokabookcontact@gmail.com" target="_blank" class="fw-bold">mokabookcontact@gmail.com</a></p>
+    <p class="mobile-phone-number"><i class="fas fa-mobile-alt text-primary me-1"></i> موبایل: <a href="tel:0993257884">{{ "0993257884"|to_persian_number_filter }}</a></p>
+    <p class="mobile-phone-number"><i class="fas fa-phone-alt text-primary me-1"></i> تلفن: <a href="tel:02155652280">{{ "02155652280"|to_persian_number_filter }}</a></p>
+    <p><i class="fas fa-map-marker-alt text-primary me-1"></i> آدرس: {{ "تهران، خیابان انقلاب، نبش کوچه کتاب، پلاک 12، طبقه 4"|to_persian_number_filter }}</p>
+  
+</section>
+
+{% endblock %}
+
+

@@ -1,0 +1,17 @@
+# محیط مجازی و تنظیمات شخصی
+.venv/
+.vscode/
+
+# فایل‌های حساس
+.env
+
+# فایل‌های کامپایل‌شده
+_pycache_/
+*.pyc
+
+# دیتابیس لوکال
+db.sqlite3
+
+# مستندات خصوصی
+README.md
+PROJECTION_DOCUMENTATION.md

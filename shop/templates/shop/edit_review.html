@@ -1,0 +1,39 @@
+{% extends 'shop/base.html' %}
+{% block title %}ویرایش نقد{% endblock %}
+{% block body_class %}edit-review-page{% endblock %}
+{% block content %}
+
+<!-- عنوان صفحه -->
+<h2 class="section-title text-center mb-4">ویرایش نقد</h2>
+
+<!-- فرم ویرایش نقد -->
+<form method="post" class="edit-review-form mx-auto" style="max-width: 600px;">
+  {% csrf_token %}
+
+  <!-- فیلد امتیاز -->
+  <div class="form-group mb-3">
+    <label for="{{ form.rating.id_for_label }}" class="form-label">امتیاز:</label>
+    {{ form.rating }}
+    {% if form.rating.errors %}
+      <div class="text-danger">{{ form.rating.errors.0 }}</div>
+    {% endif %}
+  </div>
+
+  <!-- فیلد متن نقد -->
+  <div class="form-group mb-3">
+    <label for="{{ form.comment.id_for_label }}" class="form-label">متن نقد:</label>
+    {{ form.comment }}
+    {% if form.comment.errors %}
+      <div class="text-danger">{{ form.comment.errors.0 }}</div>
+    {% endif %}
+  </div>
+
+  <div class="text-center mt-4 d-flex justify-content-center gap-3 flex-wrap">
+    <button type="submit" class="btn btn-primary btn-bold">ذخیره تغییرات</button>
+    <a href="{% url 'my_reviews' %}" class="btn btn-outline-secondary btn-back btn-bold">انصراف</a>
+  </div>
+</form>
+
+{% endblock %}
+
+

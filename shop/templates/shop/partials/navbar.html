@@ -1,0 +1,32 @@
+{% load custom_filters %}
+
+<!-- نوار ناوبری اصلی سایت -->
+<nav class="navbar">
+<ul class="nav-list">
+
+  <li><a href="{% url 'home' %}" class="btn btn-outline-primary"><i class="fas fa-home ms-1"></i> خانه</a></li>
+  <li><a href="{% url 'book_list' %}" class="btn btn-outline-primary"><i class="fas fa-book ms-1"></i> کتاب‌ها</a></li>
+
+
+  {% if request.user.is_authenticated %}
+    <li><a href="{% url 'profile' %}" class="btn btn-outline-primary"><i class="fas fa-user ms-1"></i> پروفایل</a></li>
+
+    <li><a href="{% url 'cart' %}" class="btn btn-outline-primary"><i class="fas fa-shopping-cart ms-1"></i> سبد خرید</a></li>
+
+    {% if perms.shop.add_book %}
+    <li><a href="{% url 'add_book' %}" class="btn btn-outline-success"><i class="fas fa-plus ms-1"></i> افزودن کتاب</a></li>
+    {% endif %}
+
+    <li>
+      <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-danger"><i class="fas fa-sign-out-alt ms-1"></i> خروج</button>
+      </form>
+    </li>
+
+  {% endif %}
+
+</ul>
+</nav>
+
+ 

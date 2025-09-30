@@ -1,0 +1,113 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block title %}لیست کتاب‌ها{% endblock %}
+{% block body_class %}book-list-page{% endblock %}
+{% block content %}
+
+<!-- عنوان صفحه -->
+<h1 class="page-title">لیست کتاب‌ها</h1>
+
+<!-- فرم جستجو و فیلتر کتاب‌ها -->
+<form method="get" class="search-form mb-5">
+  <div class="row">
+    <!-- فیلدهای جستجو و فیلتر -->
+    <div class="col-md-6 mb-3">{{ form.q.label_tag }} {{ form.q }}</div>
+    <div class="col-md-6 mb-3">{{ form.author.label_tag }} {{ form.author }}</div>
+    <div class="col-md-6 mb-3">{{ form.translator.label_tag }} {{ form.translator }}</div>
+    <div class="col-md-6 mb-3">{{ form.publisher.label_tag }} {{ form.publisher }}</div>
+    <div class="col-md-6 mb-3">{{ form.category.label_tag }} {{ form.category }}</div>
+    <div class="col-md-6 mb-3">{{ form.sort.label_tag }} {{ form.sort }}</div>
+  </div>
+
+  <!-- اسلایدر قیمت -->
+  <div class="form-group mb-4 position-relative">
+    <label class="form-label">حداکثر قیمت (تومان)</label>
+    <div class="slider-container">
+      <div id="price-slider" class="price-slider"></div>
+      <div id="floating-label" class="floating-label">تا <span id="price-value">۱٬۵۰۰٬۰۰۰</span></div>
+    </div>
+    <input type="hidden" name="max_price" id="max_price" value="1500000">
+  </div>
+  <!-- دکمه جستجو -->
+  <div class="text-end mt-3">
+    <button type="submit" class="btn btn-primary btn-bold"><i class="fas fa-search me-1"></i> جستجو</button>
+  </div>
+</form>
+
+<!-- نمایش کارت‌های کتاب -->
+<div class="row gx-4">
+  {% for book in books %}
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 shadow-sm">
+          <!-- تصویر جلد کتاب -->
+        {% if book.cover and book.cover.name %}
+          <img src="{{ book.cover.url }}" class="card-img-top" alt="{{ book.title }}">
+        {% else %}
+          <img src="{% static 'images/default_cover.jpg' %}" class="card-img-top">
+        {% endif %}
+
+        <!-- اطلاعات کتاب داخل کارت -->
+        <div class="card-body d-flex flex-column">
+          <h5 class="book-title-common">{{ book.title }}</h5>
+          <p class="card-text text-muted">نویسنده: {{ book.author }}</p>
+          <p class="card-text text-muted">
+            {% if book.translator %}مترجم: {{ book.translator }}{% else %}&nbsp;{% endif %}
+          </p>
+          <p class="card-text fw-bold">
+            {% if book.price %}{{ book.price|to_persian_number_filter }} تومان{% else %}&nbsp;{% endif %}
+          </p>
+          <div class="mt-auto">
+            <a href="{% url 'book_detail' book.id %}?next={{ request.get_full_path }}" class="btn btn-sm btn-outline-primary btn-bold"><i class="fas fa-eye ms-1"></i> مشاهده کتاب</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <!-- پیام در صورت نبود کتاب -->
+    <div class="empty-message">هیچ کتابی یافت نشد.</div>
+  {% endfor %}
+</div>
+
+<!-- بارگذاری اسلایدر قیمت -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.6.1/dist/nouislider.min.css">
+<script src="https://cdn.jsdelivr.net/npm/nouislider@15.6.1/dist/nouislider.min.js"></script>
+
+<!-- اسکریپت تنظیم اسلایدر قیمت -->
+<script>
+const slider = document.getElementById('price-slider');
+
+noUiSlider.create(slider, {
+  start: [1500000],
+  connect: [true, false],
+  step: 50000,
+  direction: 'rtl',
+  range: {
+    min: 100000,
+    max: 1500000
+  },
+  format: {
+    to: value => Math.round(value),
+    from: value => Number(value)
+  }
+});
+
+slider.noUiSlider.on('update', function (values, handle) {
+  const val = parseInt(values[0]);
+  document.getElementById('price-value').innerText = val.toLocaleString('fa-IR');
+  document.getElementById('max_price').value = val;
+
+  const handleEl = slider.querySelector('.noUi-handle');
+  const sliderRect = slider.getBoundingClientRect();
+  const handleRect = handleEl.getBoundingClientRect();
+  const handleCenter = handleRect.left + handleRect.width / 2 - sliderRect.left;
+
+  const label = document.getElementById('floating-label');
+  label.style.left = `${handleCenter}px`;
+});
+</script>
+
+{% endblock %}
+
+
+

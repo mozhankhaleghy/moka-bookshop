@@ -1,0 +1,71 @@
+{% extends 'shop/base.html' %}
+{% load custom_filters %}
+{% block title %}سبد خرید{% endblock %}
+{% block body_class %}cart-page{% endblock %}
+{% block content %}
+
+<!-- عنوان صفحه -->
+<h1 class="page-title center">سبد خرید من</h1>
+
+<!-- هشدار تکمیل اطلاعات پروفایل -->
+<div class="profile-warning">
+  <p>برای خرید و ارسال کتاب‌ها، لطفاً در صورتی که اطلاعات پروفایل خود را کامل نکرده‌اید، ابتدا اطلاعات را تکمیل کنید و سپس جهت خرید، اقدام نمایید. آدرس، کد پستی و شماره تماس ضروری هستند.</p>
+  <a href="{% url 'edit_profile' %}" class="btn btn-sm btn-outline-primary btn-bold">تکمیل اطلاعات پروفایل</a>
+</div>
+
+<!-- محتوای سبد خرید -->
+<div class="cart-page">
+  {% if cart_items %}
+    <!-- ساختار گرید کارت‌ها -->
+    {% if cart_items|length == 1 %}
+    <div class="cart-grid single-item">
+    {% else %}
+    <div class="cart-grid">
+    {% endif %}
+    {% for item in cart_items %}
+    <div class="cart-card">
+      {% if item.book.cover %}
+      <img src="{{ item.book.cover.url }}" alt="{{ item.book.title }}" class="cart-thumb">
+      {% endif %}
+      <h5 class="book-title-common">{{ item.book.title }}</h5>
+      <p class="cart-quantity">تعداد: {{ item.quantity|to_persian_number_filter }}</p>
+      <p class="cart-price">{{ item.get_total_price|to_persian_number_filter }} تومان</p>
+
+      <!-- دکمه کاهش و حذف -->
+      <div class="cart-buttons">
+        {% if item.quantity > 1 %}
+        <a href="{% url 'decrease_quantity' item.id %}" class="btn btn-sm btn-outline-warning btn-bold" title="کاهش تعداد">
+          <i class="fa fa-minus"></i>
+        </a>
+        {% endif %}
+        <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger btn-delete" onclick="return confirm('آیا مطمئن هستید که می‌خواهید حذف کنید؟')"> حذف</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  
+  <!-- قیمت کل -->
+  <p class="cart-total"><span style="font-weight:600;">قیمت کل:</span><span style="font-weight:700;">{{ total_price|to_persian_number_filter }} تومان</span></p>
+  
+  <!-- دکمه‌های اکشن -->
+  <div class="cart-actions">
+    <a href="{% url 'book_list' %}" class="btn btn-outline-secondary btn-back btn-bold">ادامه خرید</a>
+    <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-back btn-bold">بازگشت به خانه</a>
+    <a href="{% url 'request_payment' %}" class="btn btn-success btn-bold"><i class="fas fa-credit-card me-1"></i> پرداخت آنلاین</a>
+  </div>
+  
+  {% else %}
+  <!-- حالت خالی سبد خرید -->
+  <div class="empty-layout">
+    <p class="empty-text">سبد خرید شما خالی است.</p>
+  </div>
+  <div class="return-button">
+    <a href="{% url 'book_list' %}" class="btn btn-outline-secondary btn-back btn-bold">رفتن به فروشگاه</a>
+  </div>
+  {% endif %}
+</div>
+
+{% endblock %}
+
+
+

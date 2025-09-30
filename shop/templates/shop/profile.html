@@ -1,0 +1,68 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% load jalali_tags %}
+{% block title %}پروفایل کاربر{% endblock %}
+{% block body_class %}profile-page{% endblock %}
+{% block content %}
+
+<!-- صفحه پروفایل کاربر -->
+<div class="profile-wrapper d-flex justify-content-center align-items-start gap-4" style="padding: 40px;">
+  
+  <!-- اطلاعات کاربر -->
+  <div class="main-content profile-main">
+    <h1 class="page-title center">پروفایل من</h1>
+    <div class="profile-box">
+
+      <!-- تصویر پروفایل -->
+      <div class="text-center mb-3">
+        {% if user.profile_image and user.profile_image.url %}
+        <img src="{{ user.profile_image.url }}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;">
+        {% else %}
+        <img src="{% static 'images/default_profile.png' %}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;">
+        {% endif %}
+      </div>
+
+      <!-- جزئیات اطلاعات کاربر -->
+      <p><strong>نام کاربری:</strong> {{ user.username }}</p>
+      <p><strong>ایمیل:</strong> {% if user.email %}{{ user.email }}{% else %}ثبت نشده{% endif %}</p>
+      <p><strong>شماره موبایل:</strong> {% if user.phone_number %}{{ user.phone_number|to_persian_number_filter }}{% else %}ثبت نشده{% endif %}</p>
+      <p><strong>نام:</strong> {% if user.first_name %}{{ user.first_name }}{% else %}ثبت نشده{% endif %}</p>
+      <p><strong>نام خانوادگی:</strong> {% if user.last_name %}{{ user.last_name }}{% else %}ثبت نشده{% endif %}</p>
+      <p><strong>آدرس:</strong> {% if user.address %}{{ user.address|to_persian_number_filter }}{% else %}ثبت نشده{% endif %}</p>
+      <p><strong>کد پستی:</strong> {% if user.postal_code %}{{ user.postal_code|to_persian_number_filter }}{% else %}ثبت نشده{% endif %}</p>
+      <p><strong>تاریخ ثبت‌نام:</strong> {{ user.date_joined|to_jalali|to_persian_number_filter }}</p>
+
+      <!-- دکمه ویرایش اطلاعات -->
+      <div class="text-center mt-4">
+        <a href="{% url 'edit_profile' %}" class="btn btn-primary btn-bold"><i class="fas fa-user-edit me-1"></i> ویرایش اطلاعات</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- میان‌برهای عملکردی -->
+  <div class="profile-actions" style="min-width: 200px;">
+    <div class="action-item mb-3">
+      <span class="arrow">➤</span>
+      <a href="{% url 'wishlist' %}" class="btn btn-outline-danger w-100">
+        <i class="fas fa-heart fa-sm"></i> علاقه‌مندی‌های من
+      </a>
+    </div>
+    <div class="action-item mb-3">
+      <span class="arrow">➤</span>
+      <a href="{% url 'my_reviews' %}" class="btn btn-outline-warning w-100">
+        <i class="fas fa-star fa-sm"></i> نقدهای من
+      </a>
+    </div>
+    <div class="action-item">
+      <span class="arrow">➤</span>
+      <a href="{% url 'my_books' %}" class="btn btn-outline-success w-100">
+        <i class="fas fa-book fa-sm"></i> کتاب‌های من
+      </a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+

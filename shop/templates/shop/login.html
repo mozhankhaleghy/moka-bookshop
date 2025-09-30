@@ -1,0 +1,62 @@
+{% extends 'shop/base.html' %}
+{% block title %}ورود{% endblock %}
+{% block body_class %}login-page{% endblock %}
+{% block content %}
+
+<!-- صفحه ورود -->
+<div class="login-page">
+  <div class="login-wrapper">
+    <!-- عنوان صفحه -->
+    <h1 class="page-title center mb-4">ورود به حساب</h1>
+    
+    <!-- فرم ورود -->
+    <form method="POST">
+      {% csrf_token %}
+      <!-- نمایش خطاهای کلی فرم -->
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+          {% for error in form.non_field_errors %}
+            <div>{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">        <!-- لیبل فیلد با علامت ستاره برای فیلدهای ضروری -->
+          {{ field.label }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+        </label>
+        {{ field }}        <!-- فیلد ورودی -->
+        {% if field.errors %}        <!-- نمایش خطاهای فیلد -->
+        <div class="text-danger">{{ field.errors.0 }}</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+      
+      <!-- چک‌باکس مرا به خاطر بسپار -->
+      <div class="form-check mt-3 remember-check">
+        <input class="form-check-input" type="checkbox" name="remember_me" id="rememberMe"{% if remember_me_checked %}checked{% endif %}>
+        <label class="form-check-label" for="rememberMe">مرا به خاطر بسپار</label>
+      </div>
+      
+      <!-- دکمه ورود -->
+      <div class="text-center mt-4">
+        <button type="submit" class="btn btn-primary w-100 py-2"><i class="fas fa-sign-in-alt me-1"></i> ورود</button>
+      </div>
+      
+      <!-- لینک بازیابی رمز عبور -->
+      <div class="text-center mt-3">
+        <a href="{% url 'password_reset' %}" class="forgot-link">رمز عبور را فراموش کرده‌ام</a>
+      </div>
+      
+      <!-- لینک ثبت‌نام -->
+      <div class="text-center mt-3">
+        <a href="{% url 'signup' %}" class="btn btn-outline-success btn-sm w-100"><i class="fas fa-user-plus me-1"></i> ثبت‌نام</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
+
+
+

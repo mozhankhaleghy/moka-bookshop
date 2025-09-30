@@ -1,0 +1,89 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block title %}خانه | فروشگاه کتاب موکا{% endblock %}
+{% block body_class %}home-page{% endblock %}
+{% block content %}
+
+<!-- خوش‌آمدگویی برند -->
+<div class="text-center mb-5">
+    <h1 class="welcome-title"><i class="fas fa-star text-warning-w me-2"></i> به فروشگاه کتاب موکا خوش آمدید</h1>
+    <p class="brand-slogan"><i class="fas fa-book-open text-info me-2"></i> کتاب‌های تازه، تجربه‌ای تازه</p>
+</div>
+
+<!-- جدیدترین کتاب‌ها -->
+<div class="book-section-np">
+    <h2 class="section-np-title new-title text-center"><i class="fas fa-bolt fa-lg me-2 text-info"></i> جدیدترین کتاب‌ها</h2>
+    <div class="row">
+        {% for book in latest_books %}
+         <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if book.cover and book.cover.name %}
+                <img src="{{ book.cover.url }}" class="card-img-top" alt="{{ book.title }}">
+                {% else %}
+                <img src="{% static 'images/default_cover.jpg' %}" class="card-img-top">
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="book-title-common">{{ book.title }}</h5>  
+                    <p class="card-text text-muted">نویسنده: {{ book.author }}</p>
+                    <p class="card-text text-muted">
+                        {% if book.translator %}مترجم: {{ book.translator }}{% else %}&nbsp;{% endif %}
+                    </p>
+                    <p class="card-text">
+                        {% if book.publisher %}ناشر: {{ book.publisher }}{% else %}&nbsp;{% endif %}
+                    </p>
+                    <p class="card-text fw-bold">
+                        {% if book.price %}{{ book.price|to_persian_number_filter }} تومان{% else %}&nbsp;{% endif %}
+                    </p>
+                    <div class="mt-auto">
+                        <a href="{% url 'book_detail' book.id %}?next={{ request.get_full_path }}" class="btn btn-sm btn-outline-primary btn-bold"><i class="fas fa-eye ms-1"></i> مشاهده کتاب</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+            <div class="empty-message">هنوز کتابی ثبت نشده است.</div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- محبوب‌ترین کتاب‌ها -->
+<div class="book-section-np mt-5">
+    <h2 class="section-np-title popular-title text-center mt-5"><i class="fas fa-heart fa-lg me-2 text-danger"></i> محبوب‌ترین کتاب‌ها</h2>
+    <div class="row gx-4 justify-content-center">
+        {% for book in popular_books %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if book.cover and book.cover.name %}
+                <img src="{{ book.cover.url }}" class="card-img-top" alt="{{ book.title }}">
+                {% else %}
+                <img src="{% static 'images/default_cover.jpg' %}" class="card-img-top">
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="book-title-common">{{ book.title }}</h5>  
+                    <p class="card-text text-muted">نویسنده: {{ book.author }}</p>
+                    <p class="card-text text-muted">
+                        {% if book.translator %}مترجم: {{ book.translator }}{% else %}&nbsp;{% endif %}
+                    </p>
+                    <p class="card-text">
+                        {% if book.publisher %}ناشر: {{ book.publisher }}{% else %}&nbsp;{% endif %}
+                    </p>
+                    <p class="card-text fw-bold">
+                        {% if book.price %}{{ book.price|to_persian_number_filter }} تومان{% else %}&nbsp;{% endif %}
+                    </p>
+                    <div class="mt-auto">
+                        <a href="{% url 'book_detail' book.id %}?next={{ request.get_full_path }}" class="btn btn-sm btn-outline-primary btn-bold"><i class="fas fa-eye ms-1"></i> مشاهده کتاب</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="empty-message">هنوز کتاب محبوبی ثبت نشده است.</div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+
+
+

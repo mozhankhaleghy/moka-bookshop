@@ -1,0 +1,42 @@
+  {% extends 'shop/base.html' %}
+  {% load custom_filters %}
+  {% load jalali_tags %}
+  {% block title %}رسید سفارش{% endblock %}
+  {% block body_class %}receipt-page{% endblock %}
+  {% block content %}
+
+  <!-- باکس رسید سفارش -->
+  <div class="receipt-wrapper">
+    <div class="receipt-box">
+      <!-- عنوان صفحه -->
+      <h1 class="receipt-title">رسید سفارش</h1>
+      <div class="receipt-section">
+        <p><strong>تاریخ سفارش:</strong> {{ order.created_at|to_jalali|to_persian_number_filter }}</p>
+      </div>
+      <div class="receipt-section">
+        <h4>اطلاعات کاربر:</h4>
+        <p>{{ order.user.first_name }} {{ order.user.last_name }}</p>
+        <p>{{ order.user.email }}</p>
+        <p>{{ order.user.phone_number|to_persian_number_filter }}</p>
+      </div>
+      <div class="receipt-section">
+        <h4>لیست کتاب‌ها:</h4>
+        <ul>
+          {% for item in order.items.all %}
+            <li>{{ item.book.title }} × {{ item.quantity|to_persian_number_filter }} ⟸ {{ item.book.price|to_persian_number_filter }} تومان</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <p class="receipt-total">قیمت کل: {{ order.total_price|to_persian_number_filter }} تومان</p>
+
+      <div class="text-center">
+        <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-back btn-bold">بازگشت به خانه</a>
+      </div>
+    </div>
+  </div>
+
+  {% endblock %}
+
+
+

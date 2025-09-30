@@ -1,0 +1,37 @@
+{% extends 'shop/base.html' %}
+{% block title %}افزودن نقد{% endblock %}
+{% block body_class %}add-review-page{% endblock %}
+{% block content %}
+
+<!-- عنوان صفحه با نام کتاب -->
+<h2 class="center-title">افزودن نقد برای {{ book.title }}</h2>
+
+<!-- فرم افزودن نقد -->
+<form method="post" class="review-form">
+  {% csrf_token %}
+
+  <!-- فیلد امتیاز -->
+  <div class="mb-3">
+    <label for="id_rating" class="form-label">امتیاز</label>
+    {{ form.rating }}
+  </div>
+
+  <!-- فیلد متن نقد -->
+  <div class="mb-3">
+    <label for="id_comment" class="form-label">متن نقد</label>
+    {{ form.comment }}
+  </div>
+  
+  <div class="d-flex justify-content-start gap-2">
+    <button type="submit" class="btn btn-primary"><i class="fas fa-comment-dots me-1"></i> ثبت نقد</button>
+    {% if request.GET.next %}
+    <a href="{{ request.GET.next }}" class="btn btn-outline-secondary btn-back btn-bold">بازگشت</a>
+    {% else %}
+    <a href="{% url 'book_detail' book.id %}" class="btn btn-outline-secondary btn-back btn-bold">بازگشت</a>
+    {% endif %}
+  </div>
+</form>
+  
+{% endblock %}
+
+

@@ -1,0 +1,23 @@
+{% extends 'shop/base.html' %}
+{% block title %}لغو پرداخت{% endblock %}
+{% block body_class %}cancel-page{% endblock %}
+{% block content %}
+
+<!-- پیام لغو پرداخت -->
+<div class="cancel-wrapper">
+  <div class="cancel-box">
+    <!-- عنوان پیام -->
+    <h2 class="cancel-title">پرداخت لغو شد ❌</h2>
+    <p class="cancel-message">پرداخت توسط شما لغو شد و سفارش ثبت نشد.</p>
+    <div class="cancel-actions">
+      <a href="{% url 'cart' %}" class="btn btn-outline-secondary btn-back btn-bold">بازگشت به سبد خرید</a>
+      <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-back btn-bold">بازگشت به خانه</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+

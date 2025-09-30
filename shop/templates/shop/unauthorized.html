@@ -1,0 +1,17 @@
+{% extends 'shop/base.html' %}
+{% block title %}دسترسی غیرمجاز{% endblock %}
+{% block body_class %}unauthorized-page{% endblock %}
+{% block content %}
+
+<!-- پیام دسترسی غیرمجاز -->
+<div class="main-content text-center">
+  <!-- عنوان هشدار -->
+  <h1 class="text-danger"><i class="fas fa-ban"></i> دسترسی غیرمجاز</h1>
+  <p class="empty-message">شما اجازه دسترسی به این بخش را ندارید.</p>
+  <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-back btn-bold mt-3">بازگشت به صفحه اصلی</a>
+</div>
+
+{% endblock %}
+
+
+

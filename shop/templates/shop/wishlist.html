@@ -1,0 +1,47 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %}علاقه‌مندی‌ها{% endblock %}
+{% block body_class %}wishlist-page{% endblock %}
+{% block content %}
+
+<!-- عنوان صفحه و تعداد کتاب‌ها -->
+<h2 class="page-title">علاقه‌مندی‌های من ({{ wishlist_count }} کتاب)</h2>
+
+{% if wishlist %}
+  <!-- گرید نمایش کتاب‌های علاقه‌مندی -->
+  <div class="wishlist-grid">
+    {% for item in wishlist %}
+      <div class="wishlist-card card-hover-effect">
+        <!-- تصویر جلد کتاب -->
+        {% if item.book.cover and item.book.cover.name %}
+          <img src="{{ item.book.cover.url }}" alt="{{ item.book.title }}" class="wishlist-thumb">
+        {% else %}
+          <img src="{% static 'images/default_cover.jpg' %}" class="wishlist-thumb">
+        {% endif %}
+        <!-- عنوان و نویسنده -->
+        <h5 class="book-title-common">{{ item.book.title }}</h5>
+        <p class="wishlist-author text-muted">{{ item.book.author }}</p>
+        
+        <!-- دکمه‌های مشاهده و حذف -->
+        <div class="wishlist-actions mt-auto">
+          <a href="{% url 'book_detail' item.book.id %}?next={{ request.get_full_path }}" class="btn btn-sm btn-outline-primary btn-bold"><i class="fas fa-eye ms-1"></i> مشاهده کتاب</a>
+          <a href="{% url 'toggle_wishlist' item.book.id %}" class="btn btn-danger btn-delete" onclick="return confirm('آیا مطمئن هستید که می‌خواهید حذف کنید؟')"> حذف</a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <!-- حالت خالی -->
+  <div class="empty-layout">
+    <p class="empty-text">لیست علاقه‌مندی‌های شما خالی است.</p>
+  </div>
+{% endif %}
+
+<div class="return-button">
+  <a href="{% url 'profile' %}" class="btn btn-outline-secondary btn-back btn-bold">بازگشت به پروفایل</a>
+</div>
+
+{% endblock %}
+
+
+

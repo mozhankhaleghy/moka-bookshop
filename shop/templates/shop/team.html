@@ -1,0 +1,26 @@
+{% extends 'shop/base.html' %}
+{% block title %}تیم ما{% endblock %}
+{% block body_class %}team-page{% endblock %}
+{% block content %}
+
+<!-- بخش معرفی تیم -->
+<section class="team-section">
+    <h1 class="page-title-special">تیم فروشگاه کتاب موکا</h1>
+
+  <!-- گرید اعضای تیم -->
+    <div class="team-grid d-flex flex-wrap justify-content-center">
+        {% for member in team_members %}
+            <div class="team-card text-center m-3 p-3 border rounded" style="width: 250px;">
+                <img src="{{ member.photo.url }}" alt="{{ member.name }}" class="avatar mb-2" style="width:120px; height:120px; border-radius:50%; object-fit:cover;">        <!-- تصویر عضو تیم -->
+                <h3 class="section-card center">{{ member.name }}</h3>        <!-- نام و نقش -->
+                <strong>{{ member.role }}</strong>
+                <p>{{ member.description }}</p>        <!-- توضیح کوتاه -->
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}
+
+
+

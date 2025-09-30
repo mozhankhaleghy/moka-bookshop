@@ -1,0 +1,54 @@
+{% extends 'shop/base.html' %}
+{% block title %}ویرایش کتاب{% endblock %}
+{% block body_class %}edit-book-page{% endblock %}
+{% block content %}
+
+<!-- عنوان صفحه با نام کتاب -->
+<h1 class="page-title">ویرایش کتاب "{{ form.instance.title }}"</h1>
+
+<!-- فرم ویرایش کتاب -->
+<form method="POST" enctype="multipart/form-data" class="book-form">
+  {% csrf_token %}
+  <div class="row">
+    <!-- اطلاعات پایه کتاب -->
+    <div class="col-md-6 mb-3">{{ form.title.label_tag }}{{ form.title }}</div>
+    <div class="col-md-6 mb-3">{{ form.author.label_tag }}{{ form.author }}</div>
+    <div class="col-md-6 mb-3">{{ form.translator.label_tag }}{{ form.translator }}</div>
+    <div class="col-md-6 mb-3">{{ form.publisher.label_tag }}{{ form.publisher }}</div>
+    <div class="col-md-6 mb-3">{{ form.category.label_tag }}{{ form.category }}</div>
+    <div class="col-md-6 mb-3">{{ form.publication_year.label_tag }}{{ form.publication_year }}</div>
+    <div class="col-md-6 mb-3">{{ form.page_count.label_tag }}{{ form.page_count }}</div>
+    <div class="col-md-6 mb-3">{{ form.stock.label_tag }}{{ form.stock }}</div>
+
+    <!-- تصویر جلد فعلی و آپلود جدید -->
+    <div class="col-md-6 mb-3">
+      <label for="{{ form.cover.id_for_label }}"><i class="fas fa-upload me-1"></i> {{ form.cover.label }}</label>
+      {% if form.instance.cover %}
+      <div class="col-md-6 mb-3">
+        <label>جلد فعلی:</label><br><img src="{{ form.instance.cover.url }}" alt="جلد کتاب" class="img-thumbnail" style="max-height: 200px;">
+      </div>
+      {% endif %}
+      {{ form.cover }}
+    </div>
+
+    <!-- قیمت کتاب -->
+    <div class="col-md-6 mb-3">{{ form.price.label_tag }}<div class="input-group">{{ form.price }}<span class="input-group-text">تومان</span></div></div>
+
+    <!-- معرفی کتاب -->
+    <div class="col-12 mb-3">{{ form.introduction.label_tag }}{{ form.introduction }}</div></div>
+
+  <div class="text-end">
+    <button type="submit" class="btn btn-primary btn-bold">ذخیره تغییرات</button>
+  </div>
+</form>
+
+{% if request.META.HTTP_REFERER %}
+  <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-outline-secondary btn-back btn-bold">بازگشت</a>
+{% else %}
+  <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-back btn-bold">بازگشت به خانه</a>
+{% endif %}
+
+{% endblock %}
+
+
+

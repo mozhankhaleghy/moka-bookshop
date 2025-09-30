@@ -1,0 +1,35 @@
+{% extends 'shop/base.html' %}
+{% block title %}ویرایش پروفایل{% endblock %}
+{% block body_class %}edit-profile-page{% endblock %}
+{% block content %}
+
+<!-- محتوای اصلی صفحه ویرایش پروفایل -->
+<div class="main-content edit-profile-wrapper">
+  <h1 class="page-title">ویرایش اطلاعات کاربری</h1>
+
+  <!-- فرم ویرایش اطلاعات کاربر -->
+  <form method="POST" enctype="multipart/form-data" class="edit-profile-form">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group">
+      <label for="{{ field.id_for_label }}">      <!-- لیبل فیلد با علامت ستاره برای فیلدهای ضروری -->
+        {{ field.label }}{% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+      </label>
+      {{ field }}      <!-- فیلد ورودی -->
+      {% if field.errors %}      <!-- نمایش خطاهای فیلد -->
+      <div class="text-danger">{{ field.errors.0 }}</div>
+      {% endif %}
+    </div>
+    {% endfor %}
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-primary btn-bold ">ذخیره تغییرات</button>
+    </div>
+  </form>
+
+  <div class="text-center mt-4">
+    <a href="{% url 'profile' %}" class="btn btn-outline-secondary btn-back btn-bold">بازگشت به پروفایل</a>
+  </div>
+</div>
+
+{% endblock %}
+

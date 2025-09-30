@@ -1,0 +1,44 @@
+{% extends 'shop/base.html' %}
+{% load custom_filters %}
+{% load jalali_tags %}
+{% block title %}نقدهای من{% endblock %}
+{% block body_class %}my-reviews-page{% endblock %}
+{% block content %}
+
+<!-- عنوان صفحه با تعداد نقدها -->
+<h2 class="page-title">نقدهای من ({{ reviews_count|to_persian_number_filter }} نقد)</h2>
+
+<!-- لیست نقدها -->
+{% if reviews %}
+  <div class="review-grid">
+    {% for review in reviews %}
+      <div class="review-card card-hover-effect">
+        <h5 class="review-title">{{ review.book.title }}</h5>        <!-- عنوان کتاب -->
+        <span class="review-rating text-warning">⭐ {{ review.rating|to_persian_number_filter }} از ۵</span>      <!-- امتیاز نقد -->
+        <p class="review-comment">{{ review.comment }}</p>       <!-- متن نقد -->
+        <p class="review-date text-muted small">{{ review.created_at|to_jalali|to_persian_number_filter }}</p>      <!-- تاریخ ثبت نقد -->
+      
+        <!-- دکمه‌های ویرایش و حذف -->
+        <div class="review-actions">
+          <a href="{% url 'edit_review' review.id %}" class="btn btn-warning btn-edit"> ویرایش</a>
+          <form method="post" action="{% url 'delete_review' review.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-delete" onclick="return confirm('آیا مطمئن هستید که می‌خواهید حذف کنید؟')"> حذف</button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <!-- حالت خالی -->
+  <div class="empty-layout">
+    <p class="empty-text">هنوز نقدی ثبت نکرده‌اید.</p>
+  </div>
+{% endif %}
+
+<div class="return-button">
+  <a href="{% url 'profile' %}" class="btn btn-outline-secondary btn-back btn-bold">بازگشت به پروفایل</a>
+</div>
+
+{% endblock %}
+

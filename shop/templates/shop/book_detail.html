@@ -1,0 +1,139 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% load jalali_tags %}
+{% block body_class %}book-detail-page{% endblock %}
+{% block title %}جزئیات کتاب{% endblock %}
+
+{% block content %}
+
+<!-- عنوان کتاب -->
+<div class="book-detail-header">
+  <h1 class="book-detail-title">{{ book.title }}</h1>
+</div>
+
+<!-- تصویر جلد کتاب -->
+<div class="text-center my-3">
+  {% if book.cover and book.cover.name %}
+    <img src="{{ book.cover.url }}" alt="جلد کتاب {{ book.title }}" class="book-cover-large">
+  {% else %}
+    <img src="{% static 'images/default_cover.jpg' %}" class="book-cover-large">
+  {% endif %}
+</div>
+
+<!-- اطلاعات کتاب -->
+<p><strong>نویسنده:</strong> {{ book.author }}</p>
+{% if book.translator %}
+  <p><strong>مترجم:</strong> {{ book.translator }}</p>
+{% endif %}
+<p><strong>انتشارات:</strong> {{ book.publisher }}</p>
+<p><strong>سال انتشار:</strong> {{ book.publication_year|to_persian_number_filter }}</p>
+<p><strong>صفحات:</strong> {{ book.page_count|to_persian_number_filter }}</p>
+<p><strong>دسته‌بندی:</strong> {{ book.get_category_display }}</p>
+<p><strong>قیمت:</strong> {{ book.price|to_persian_number_filter }} تومان</p>
+<p><strong>موجودی:</strong>
+  {% if book.stock > 0 %}
+    {{ book.stock|to_persian_number_filter }} عدد
+  {% else %}
+    <span class="text-danger">ناموجود</span>
+  {% endif %}
+</p>
+<p class="book-introduction"><strong>معرفی:</strong> {{ book.introduction|to_persian_number_filter }}</p>
+
+<!-- دکمه‌های اکشن برای کاربران -->
+<div class="action-buttons mt-3">
+  {% if user.is_authenticated and book.stock > 0 %}
+  <a href="{% url 'add_to_cart' book.id %}" class="btn btn-sm btn-outline-success btn-bold"><i class="fas fa-cart-plus fa-sm ms-1"></i> افزودن به سبد خرید</a>
+  {% endif %}
+
+  {% if user.is_authenticated %}
+    <a href="{% url 'toggle_wishlist' book.id %}" class="btn btn-sm btn-bold me-2 {% if is_in_wishlist %}btn-danger btn-bold{% else %}btn-outline-danger btn-bold{% endif %}">
+      <i class="fas fa-heart fa-sm ms-1"></i>
+      {% if is_in_wishlist %}حذف از علاقه‌مندی‌ها{% else %}افزودن به علاقه‌مندی‌ها{% endif %}
+    </a>
+  {% endif %}
+
+  {% if perms.shop.change_book %}
+    <a href="{% url 'edit_book' book.id %}" class="btn btn-warning btn-edit">ویرایش</a>
+    <form method="POST" action="{% url 'delete_book' book.id %}" onsubmit="return confirm('آیا مطمئن هستید که می‌خواهید حذف کنید؟')" style="display: inline;">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger btn-delete">حذف</button>
+    </form>
+  {% endif %}
+</div>
+
+<!-- کتاب‌های مشابه -->
+<hr>
+<h4 class="section-subtitle mt-4">کتاب‌های مشابه:</h4>
+<div class="row gx-4 justify-content-center">
+  {% for related in related_books %}
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 shadow-sm">
+        {% if related.cover and related.cover.name %}
+          <img src="{{ related.cover.url }}" class="card-img-top" alt="{{ related.title }}">
+        {% else %}
+          <img src="{% static 'images/default_cover.jpg' %}" class="card-img-top">
+        {% endif %}
+        <div class="card-body d-flex flex-column">
+          <h5 class="book-title-common">{{ related.title }}</h5>
+          <p class="card-text text-muted">نویسنده: {{ related.author }}</p>
+          <p class="card-text text-muted">
+            {% if related.translator %}مترجم: {{ related.translator }}{% else %}&nbsp;{% endif %}
+          </p>
+          <p class="card-text">
+            {% if related.publisher %}ناشر: {{ related.publisher }}{% else %}&nbsp;{% endif %}
+          </p>
+          <p class="card-text fw-bold">
+            {% if related.price %}{{ related.price|to_persian_number_filter }} تومان{% else %}&nbsp;{% endif %}
+          </p>
+          <div class="mt-auto">
+            <a href="{% url 'book_detail' related.id %}?next={{ request.get_full_path }}" class="btn btn-sm btn-outline-primary btn-bold"><i class="fas fa-eye ms-1"></i> مشاهده کتاب</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div class="empty-message">کتاب مشابهی یافت نشد.</div>
+  {% endfor %}
+</div>
+
+<!-- نقدهای کاربران -->
+<hr>
+<h4 class="section-subtitle mt-4">نقدهای کاربران:</h4>
+
+{% if book.reviews.exists %}
+  <div class="review-list">
+    {% for review in book.reviews.all %}
+      <div class="review-box">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <strong>{{ review.user.username }}</strong>
+          <span class="review-rating text-warning">⭐ امتیاز: {{ review.rating|to_persian_number_filter }} از ۵</span>
+        </div>
+        <p>{{ review.comment }}</p>
+        <p class="text-muted small">{{ review.created_at|to_jalali|to_persian_number_filter }}</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if user.is_authenticated %}
+    <div class="text-center mt-3">
+      <a href="{% url 'add_review' book.id %}?next={{ request.get_full_path }}" class="btn btn-outline-info btn-bold">افزودن نقد</a>
+    </div>
+  {% endif %}
+  {% else %}
+  <p class="empty-message text-center">هنوز نقدی ثبت نشده.</p>
+  {% if user.is_authenticated %}
+    <div class="text-center mt-2">
+      <a href="{% url 'add_review' book.id %}?next={{ request.get_full_path }}" class="btn btn-outline-info btn-bold">افزودن نقد</a>
+    </div>
+  {% endif %}
+{% endif %}
+
+{% if request.META.HTTP_REFERER %}
+  <a href="{{ back_url }}" class="btn btn-outline-secondary btn-back btn-bold">بازگشت</a>
+{% else %}
+  <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-back btn-bold">بازگشت به خانه</a>
+{% endif %}
+
+{% endblock %}
+

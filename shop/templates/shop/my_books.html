@@ -1,0 +1,50 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %}کتاب‌های من{% endblock %}
+{% block body_class %}my-books-page{% endblock %}
+{% block content %}
+
+<!-- صفحه کتاب‌های خریداری‌شده -->
+<div class="my-books-wrapper">
+  <h1 class="page-title">کتاب‌های خریداری‌شده</h1>
+
+  {% if books %}
+  <!-- گرید نمایش کتاب‌ها -->
+  <div class="book-grid">
+    {% for book in books %}
+    <div class="book-card card-hover-effect">
+      <!-- تصویر جلد کتاب -->
+      <div class="book-thumb-wrapper">
+        {% if book.cover and book.cover.name %}
+          <img src="{{ book.cover.url }}" alt="{{ book.title }}" class="book-thumb">
+        {% else %}
+          <img src="{% static 'images/default_cover.jpg' %}" class="book-thumb">
+        {% endif %}
+      </div>
+
+      <!-- اطلاعات کتاب -->
+      <div class="book-info">
+        <h5 class="book-title">{{ book.title }}</h5>
+        <p class="book-author">{{ book.author }}</p>
+        <a href="{% url 'book_detail' book.id %}?next={{ request.get_full_path }}" class="btn btn-sm btn-outline-primary btn-bold"><i class="fas fa-eye ms-1"></i> مشاهده کتاب</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <!-- حالت خالی -->
+  <div class="empty-layout">
+    <p class="empty-text">هنوز کتابی خریداری نکرده‌اید.</p>
+  </div>
+  {% endif %}
+  
+  <div class="return-button">
+    <a href="{% url 'profile' %}" class="btn btn-outline-secondary btn-back btn-bold">بازگشت به پروفایل</a>
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+

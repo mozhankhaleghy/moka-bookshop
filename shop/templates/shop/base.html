@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- عنوان صفحه -->
+     <title>{% block title %}فروشگاه کتاب{% endblock %}</title>
+     
+    <!-- استایل‌ها و فونت‌ها -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- تنظیمات پایه برای فونت و رنگ -->
+     <style>
+     body { 
+      direction: rtl;
+      font-family: 'Vazir', sans-serif;
+      background-color: #edf0f5;
+      color: #212529;
+    }
+    </style>
+    
+  </head> 
+  <body class="{% block body_class %}{% endblock %}">
+    <div class="page-wrapper">
+
+      <!-- نوار ناوبری فقط برای کاربران واردشده -->
+      {% if request.user.is_authenticated %}
+      {% include 'shop/partials/navbar.html' %}
+      {% endif %}
+      
+      <!-- نمایش پیام‌های سیستمی -->
+      {% if messages %}
+      <div class="container mt-3">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="بستن"></button>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      
+      <!-- محتوای اصلی صفحه -->
+      <main class="main-content">
+        {% block content %}{% endblock %}
+      </main>
+      
+      <!-- فوتر سایت -->
+      <footer class="site-footer">
+        <p class="footer-text">MoKa's BookShop. All rights reserved 2025 ©</p>
+        <a href="{% url 'about' %}">درباره ما</a>
+        <a href="{% url 'contact' %}">ارتباط با ما</a>
+        <a href="{% url 'team' %}">تیم ما</a>
+        <a href="{% url 'privacy' %}">حریم خصوصی</a>
+      </footer>
+    </div>
+
+    <!-- اسکریپت‌های Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    
+    <!-- حذف خودکار پیام‌ها بعد از ۶۰ ثانیه -->
+    <script>
+    setTimeout(function() {
+      const alerts = document.querySelectorAll('.alert');
+      alerts.forEach(function(alert) {
+        alert.classList.remove('show');
+        alert.classList.add('fade');
+      });
+    }, 60000);
+    </script>
+  </body>
+</html>
+
+
+
+
