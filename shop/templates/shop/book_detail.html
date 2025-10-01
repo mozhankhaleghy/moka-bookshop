@@ -129,11 +129,6 @@
   {% endif %}
 {% endif %}
 
-{% if request.META.HTTP_REFERER %}
-  <a href="{{ back_url }}" class="btn btn-outline-secondary btn-back btn-bold">بازگشت</a>
-{% else %}
-  <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-back btn-bold">بازگشت به خانه</a>
-{% endif %}
 
 {% endblock %}
 

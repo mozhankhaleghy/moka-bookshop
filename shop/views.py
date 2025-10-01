@@ -455,7 +455,7 @@ def request_payment(request):
     data = {
         "merchant_id": settings.ZARINPAL_MERCHANT_ID,
         "amount": total_price,
-        "callback_url": "http://127.0.0.1:8000/verify/",
+        "callback_url": "https://mokabookshop.pythonanywhere.com/verify/",
         "description": "پرداخت سفارش فروشگاه MoKa",
         "metadata": metadata
     }

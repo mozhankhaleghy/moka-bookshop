@@ -15,7 +15,6 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 
-
 # مسیر اصلی پروژه برای استفاده در تنظیمات مسیرها
 BASE_DIR = Path(__file__).resolve().parent.parent
 
