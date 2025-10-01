@@ -384,7 +384,7 @@ def add_to_cart_view(request, pk):
     book = get_object_or_404(Book, pk=pk)
 
     if book.stock == 0:
-        messages.error(request, "این کتاب ناموجود است و قابل افزودن به سبد خرید نیست❌")
+        messages.error(request, "این کتاب ناموجود است و قابل افزودن به سبد خرید نیست.")
         return redirect('book_detail', pk=book.pk)
 
     cart_item, created = CartItem.objects.get_or_create(user=request.user, book=book)
@@ -393,7 +393,7 @@ def add_to_cart_view(request, pk):
         cart_item.save()
 
     request.user.update_cart_count()
-    messages.success(request, "کتاب به سبد خرید اضافه شد✅")
+    messages.success(request, "کتاب به سبد خرید اضافه شد.")
     return redirect('book_detail', pk=book.pk)
 
 # کاهش تعداد یک آیتم در سبد

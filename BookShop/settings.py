@@ -14,8 +14,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# بارگذاری متغیرهای محیطی از فایل .env برای امنیت اطلاعات حساس
-load_dotenv()
+
 
 # مسیر اصلی پروژه برای استفاده در تنظیمات مسیرها
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,8 +28,7 @@ SECRET_KEY = 'django-insecure-(10$-tp52rzgvq$a%g@5b0_o4287**&)0b-n@r940dvltcwer-
 DEBUG = True
 
 # لیست دامنه‌های مجاز برای دسترسی به پروژه
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['mokabookshop.pythonanywhere.com', '127.0.0.1', 'localhost']
 
 # اپلیکیشن‌های نصب‌شده در پروژه
 
@@ -142,6 +140,9 @@ LOGIN_URL = '/login/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# بارگذاری متغیرهای محیطی از فایل .env برای امنیت اطلاعات حساس
+load_dotenv(dotenv_path=os.path.join(BASE_DIR, '.env'))
 
 # تنظیمات ایمیل برای ارسال پیام‌های بازیابی رمز و تماس با ما
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
